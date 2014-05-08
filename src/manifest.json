@@ -1,0 +1,14 @@
+{
+  "name": "D&D Ability Generator",
+  "description": "Simple Ability Generator for D&D 3.5.",
+  "version": "1.0",
+  "app": {
+    "launch": {
+      "local_path": "app.html"
+    }
+  },
+  "icons": {
+    "16": "images/icon_256.png",
+    "128": "images/icon_256.png"
+  }
+}
