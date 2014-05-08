@@ -9,13 +9,13 @@ var ip = '0.0.0.0';
 	if (typeof ip === 'undefined') {
 		ip = '127.0.0.1';
 	}
-	http.createServer(function (request, response) {
+	http.createServer(function(request, response) {
 		var filePath = request.url;
 		console.log('Request starting: ' + filePath);
 		if (filePath === '/') {
 			filePath = '/app.html';
 		}
-		filePath = './src' + filePath;
+		filePath = './app/src' + filePath;
 	
 		var extname = path.extname(filePath);
 		var contentType = 'text/html';

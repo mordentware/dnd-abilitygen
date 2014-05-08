@@ -1,5 +1,5 @@
-Basic
-=====
+DnD Ability Generator
+=====================
 
 To start server:
 
