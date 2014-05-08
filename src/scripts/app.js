@@ -1,5 +1,5 @@
 /**
- * TODO: documentation
+ * Rolls dice according to the dice string given, returning the result.
  *
  * @param {string} diceString Formatted dice string. Valid formats are: "#", "d#" "#d#", "#d#+#", "#d#-#", "d#+#", "d#-#"
  * @return {int} Result of dice roll.
@@ -44,46 +44,146 @@ var rollDice = function(diceString) {
 
 var characterClasses = {
 	'Barbarian': {
+		abilityTrees: [
+			{
+				'STR': 0,
+				'DEX': 0,
+				'CON': 0,
+				'INT': 0,
+				'WIS': 0,
+				'CHA': 0
+			}
+		],
 		ageBracket: 0
 	},
 	'Bard': {
+		abilityTrees: [
+			{
+				'STR': 0,
+				'DEX': 0,
+				'CON': 0,
+				'INT': 0,
+				'WIS': 0,
+				'CHA': 0
+			}
+		],
 		ageBracket: 1
 	},
 	'Cleric': {
+		abilityTrees: [
+			{
+				'STR': 0,
+				'DEX': 0,
+				'CON': 0,
+				'INT': 0,
+				'WIS': 0,
+				'CHA': 0
+			}
+		],
 		ageBracket: 2
 	},
 	'Druid': {
+		abilityTrees: [
+			{
+				'STR': 0,
+				'DEX': 0,
+				'CON': 0,
+				'INT': 0,
+				'WIS': 0,
+				'CHA': 0
+			}
+		],
 		ageBracket: 2
 	},
 	'Fighter': {
 		abilityTrees: [
 			{
 				'STR': 0,
-				'DEX': 1,
-				'CON': 1,
-				'INT': 2,
-				'WIS': 2,
-				'CHA': 2
-			}
+				'DEX': 0,
+				'CON': 0,
+				'INT': 0,
+				'WIS': 0,
+				'CHA': 0
+			},
 		],
 		ageBracket: 1
 	},
 	'Monk': {
+		abilityTrees: [
+			{
+				'STR': 0,
+				'DEX': 0,
+				'CON': 0,
+				'INT': 0,
+				'WIS': 0,
+				'CHA': 0
+			}
+		],
 		ageBracket: 2
 	},
 	'Paladin': {
+		abilityTrees: [
+			{
+				'STR': 0,
+				'DEX': 0,
+				'CON': 0,
+				'INT': 0,
+				'WIS': 0,
+				'CHA': 0
+			}
+		],
 		ageBracket: 1
 	},
 	'Ranger': {
+		abilityTrees: [
+			{
+				'STR': 0,
+				'DEX': 0,
+				'CON': 0,
+				'INT': 0,
+				'WIS': 0,
+				'CHA': 0
+			}
+		],
 		ageBracket: 1
 	},
 	'Rogue': {
+		abilityTrees: [
+			{
+				'STR': 0,
+				'DEX': 0,
+				'CON': 0,
+				'INT': 0,
+				'WIS': 0,
+				'CHA': 0
+			}
+		],
 		ageBracket: 0
 	},
 	'Sorcerer': {
+		abilityTrees: [
+			{
+				'STR': 0,
+				'DEX': 0,
+				'CON': 0,
+				'INT': 0,
+				'WIS': 0,
+				'CHA': 0
+			}
+		],
 		ageBracket: 0
 	},
 	'Wizard': {
+		abilityTrees: [
+			{
+				'STR': 0,
+				'DEX': 0,
+				'CON': 0,
+				'INT': 0,
+				'WIS': 0,
+				'CHA': 0
+			}
+		],
 		ageBracket: 2
 	}
 };
