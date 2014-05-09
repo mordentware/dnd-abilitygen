@@ -1,393 +1,190 @@
-/**
- * Rolls dice according to the dice string given, returning the result.
- *
- * @param {string} diceString Formatted dice string. Valid formats are: "#", "d#" "#d#", "#d#+#", "#d#-#", "d#+#", "d#-#"
- * @return {int} Result of dice roll.
- */
-var rollDice = function(diceString) {
-	var numDice = diceString.match(/^([^d]+)/);
-	if (numDice === null || numDice.length < 2) {
-		numDice = '1';
-	}
-	else {
-		numDice = numDice[1];
-	}
-	numDice = parseInt(numDice);
-	var diceSides = diceString.match(/^[^d]*d([0-9]+)/);
-	if (diceSides === null || diceSides.length < 2) {
-		diceSides = '1';
-	}
-	else {
-		diceSides = diceSides[1];
-	}
-	diceSides = parseInt(diceSides);
-	var modifier = diceString.match(/^[^d]*d[0-9]+(.+)/);
-	if (modifier === null || modifier.length < 2) {
-		modifier = '0';
-	}
-	else {
-		modifier = modifier[1];
-	}
-	modifier = parseInt(modifier);
-	// roll dice
-	var total = 0;
-	for (var die = 0; die < numDice; die++) {
-		total += Math.ceil(diceSides*Math.random());
-	}
-	total += modifier;
-	return total;
-};
+define([
+	'jquery',
+	'character-ability',
+	'character-age-ranges',
+	'character-classes',
+	'character-genders',
+	'character-races',
+	'generation-methods',
+	'utils'
+], function(
+	$,
+	CharacterAbility,
+	characterAgeRanges,
+	characterClasses,
+	characterGenders,
+	characterRaces,
+	generationMethods,
+	utils
+) {
 
-/*
- * DATA
- */
-
-var characterClasses = {
-	'Barbarian': {
-		abilityTrees: [
-			{
-				'STR': 0,
-				'DEX': 0,
-				'CON': 0,
-				'INT': 0,
-				'WIS': 0,
-				'CHA': 0
-			}
-		],
-		ageBracket: 0
-	},
-	'Bard': {
-		abilityTrees: [
-			{
-				'STR': 0,
-				'DEX': 0,
-				'CON': 0,
-				'INT': 0,
-				'WIS': 0,
-				'CHA': 0
-			}
-		],
-		ageBracket: 1
-	},
-	'Cleric': {
-		abilityTrees: [
-			{
-				'STR': 0,
-				'DEX': 0,
-				'CON': 0,
-				'INT': 0,
-				'WIS': 0,
-				'CHA': 0
-			}
-		],
-		ageBracket: 2
-	},
-	'Druid': {
-		abilityTrees: [
-			{
-				'STR': 0,
-				'DEX': 0,
-				'CON': 0,
-				'INT': 0,
-				'WIS': 0,
-				'CHA': 0
-			}
-		],
-		ageBracket: 2
-	},
-	'Fighter': {
-		abilityTrees: [
-			{
-				'STR': 0,
-				'DEX': 0,
-				'CON': 0,
-				'INT': 0,
-				'WIS': 0,
-				'CHA': 0
-			},
-		],
-		ageBracket: 1
-	},
-	'Monk': {
-		abilityTrees: [
-			{
-				'STR': 0,
-				'DEX': 0,
-				'CON': 0,
-				'INT': 0,
-				'WIS': 0,
-				'CHA': 0
-			}
-		],
-		ageBracket: 2
-	},
-	'Paladin': {
-		abilityTrees: [
-			{
-				'STR': 0,
-				'DEX': 0,
-				'CON': 0,
-				'INT': 0,
-				'WIS': 0,
-				'CHA': 0
-			}
-		],
-		ageBracket: 1
-	},
-	'Ranger': {
-		abilityTrees: [
-			{
-				'STR': 0,
-				'DEX': 0,
-				'CON': 0,
-				'INT': 0,
-				'WIS': 0,
-				'CHA': 0
-			}
-		],
-		ageBracket: 1
-	},
-	'Rogue': {
-		abilityTrees: [
-			{
-				'STR': 0,
-				'DEX': 0,
-				'CON': 0,
-				'INT': 0,
-				'WIS': 0,
-				'CHA': 0
-			}
-		],
-		ageBracket: 0
-	},
-	'Sorcerer': {
-		abilityTrees: [
-			{
-				'STR': 0,
-				'DEX': 0,
-				'CON': 0,
-				'INT': 0,
-				'WIS': 0,
-				'CHA': 0
-			}
-		],
-		ageBracket: 0
-	},
-	'Wizard': {
-		abilityTrees: [
-			{
-				'STR': 0,
-				'DEX': 0,
-				'CON': 0,
-				'INT': 0,
-				'WIS': 0,
-				'CHA': 0
-			}
-		],
-		ageBracket: 2
-	}
-};
-
-var characterRaces = {
-	'Human': {
-		abilityModifiers: {
-			'STR': 0,
-			'DEX': 0,
-			'CON': 0,
-			'INT': 0,
-			'WIS': 0,
-			'CHA': 0
-		},
-		ageBase: 15,
-		ageBrackets: ['1d4', '1d6', '2d6'],
-		heightBase: {
-			'Male': 58,
-			'Female': 53
-		},
-		heightModifier: {
-			'Male': '2d10',
-			'Female': '2d10'
-		},
-		weightBase: {
-			'Male': 120,
-			'Female': 85
-		},
-		weightMultiplier: {
-			'Male': '2d4',
-			'Female': '2d4'
-		}
-	}
-};
-
-var generationMethods = {
-	'3d6': function() {
-		var abilities = [];
-		for (var ability = 0; ability < 6; ability++) {
-			abilities[ability] = rollDice('3d6');
-		}
-		return abilities.sort(function(a,b){return b-a;});
-	},
-	'4d6, best 3': function() {
-		var abilities = []
-		for (var ability = 0; ability < 6; ability++) {
-			var rolls = [];
-			for (var roll = 0; roll < 4; roll++) {
-				rolls[roll] = rollDice('1d6');
-			}
-			abilities[ability] = rolls.sort(function(a,b) {
-				return b-a;
-			}).slice(0, 3).reduce(function(pv, cv) {
-				return pv + cv;
-			}, 0);;
-		}
-		return abilities.sort(function(a,b){return b-a;});
-	},
-	'Elite array': function() {
-		return [15, 14, 13, 12, 10, 8];
-	},
-	'Non-elite array': function() {
-		return [13, 12, 11, 10, 9, 8];
-	}
-};
-
-/**
- * Sets up the initial app environment.
- */
-window.onload = function() {
-	var optionIndex = 0;
-	// add classes
-	var $characterClassElement = $('#char-class');
-	optionIndex = 0;
-	for (var characterClass in characterClasses) {
-		// create and append new option element
-		$characterClassElement.append($('<option>', {
-			selected: optionIndex === 0,
-			text: characterClass,
-			value: characterClass
-		}));
-		optionIndex++;
-	}
-	// add races
-	var $characterRaceElement = $('#char-race');
-	optionIndex = 0;
-	for (var characterRace in characterRaces) {
-		// create and append new option element
-		$characterRaceElement.append($('<option>', {
-			selected: optionIndex === 0,
-			text: characterRace,
-			value: characterRace
-		}));
-		optionIndex++;
-	}
-	// add generation methods
-	var $generationMethodElement = $('#generation-method');
-	optionIndex = 0;
-	for (var generationMethod in generationMethods) {
-		// create and append new option element
-		$generationMethodElement.append($('<option>', {
-			selected: optionIndex === 0,
-			text: generationMethod,
-			value: generationMethod
-		}));
-		optionIndex++;
-	}
-	// add callback to generate button
-	$('#generate').click(function() {
+	var generate = function() {
 		// get all settings
-		var currClass = characterClasses[$('#char-class').find(':selected').val()];
-		var currRace = characterRaces[$('#char-race').find(':selected').val()];
-		var currGender = $('#char-gender').find(':selected').val();
-		var currGenerationMethod = generationMethods[$('#generation-method').find(':selected').val()];
+		var selectedGenderKey = $('#generation-gender').find('option:selected').val();
+		var selectedAgeRangeKey = $('#generation-age-range').find('option:selected').val();
+		var selectedRaceKey = $('#generation-race').find('option:selected').val();
+		var selectedClassKey = $('#generation-class').find('option:selected').val();
+		var selectedClassVariantKey = $('#generation-class-variant').find('option:selected').val();
+		var randomiseClassVariant = $('#generation-class-variant-randomise').prop('checked');
+		var selectedGenerationMethodKey = $('#generation-method').find('option:selected').val();
+		var selectedRace = characterRaces[selectedRaceKey];
+		var selectedClass = characterClasses[selectedClassKey];
+		// establish class variant
+		var generatedClassVariantKey;
+		if (randomiseClassVariant) {
+			var variantKeys = Object.keys(characterClasses[selectedClassKey].variants);
+			generatedClassVariantKey = variantKeys[Math.floor(Math.random() * variantKeys.length)];
+		}
+		else {
+			generatedClassVariantKey = selectedClassVariantKey;
+		}
+		var generatedClassVariant = characterClasses[selectedClassKey].variants[generatedClassVariantKey];
+		// generate age
+		var generatedAge;
+		var generatedAgeRangeKey = selectedAgeRangeKey;
+		switch (selectedAgeRangeKey) {
+			case 'starting':
+				generatedAge = characterRaces[selectedRaceKey].ageRanges['adult'] + utils.roll(characterRaces[selectedRaceKey].ageBrackets[characterClasses[selectedClassKey].ageBracket]);
+				generatedAgeRangeKey = 'adult';
+				break;
+			case 'adult':
+				var startingAge = characterRaces[selectedRaceKey].ageRanges['adult'] + utils.roll(characterRaces[selectedRaceKey].ageBrackets[characterClasses[selectedClassKey].ageBracket]);
+				generatedAge = startingAge + Math.floor(Math.random() * (characterRaces[selectedRaceKey].ageRanges['middleaged'] - startingAge));
+				break;
+			case 'middleaged':
+				var startingAge = characterRaces[selectedRaceKey].ageRanges['middleaged'];
+				generatedAge = startingAge + Math.floor(Math.random() * (characterRaces[selectedRaceKey].ageRanges['old'] - startingAge));
+				break;
+			case 'old':
+				var startingAge = characterRaces[selectedRaceKey].ageRanges['old'];
+				generatedAge = startingAge + Math.floor(Math.random() * (characterRaces[selectedRaceKey].ageRanges['venerable'] - startingAge));
+				break;
+			case 'venerable':
+				var startingAge = characterRaces[selectedRaceKey].ageRanges['venerable'];
+				// roll their maximum age, then place them within that range
+				var maximumAge = utils.roll(characterRaces[selectedRaceKey].ageRanges['maximum']);
+				generatedAge = startingAge + Math.floor(Math.random() * maximumAge);
+				break;
+		}
+		// generate height/weight
+		var selectedPhysicalParameters = characterRaces[selectedRaceKey].physicalParameters[selectedGenderKey];
+		var generatedHeightModifier = utils.roll(selectedPhysicalParameters.heightModifier);
+		var generatedHeight = selectedPhysicalParameters.heightBase + generatedHeightModifier;
+		var generatedWeightModifier = utils.roll(selectedPhysicalParameters.weightMultiplier) * generatedHeightModifier;
+		var generatedWeight = selectedPhysicalParameters.weightBase + generatedWeightModifier;
 		// generate raw abilities
-		var abilityRolls = currGenerationMethod();
-		// select ability tree
-		var abilityTree = currClass.abilityTrees[Math.floor((currClass.abilityTrees.length)*Math.random())];
+		var abilityRolls = generationMethods[selectedGenerationMethodKey].generationFunction();
+		// initialise generated abilities
+		var generatedAbilities = {
+			'str': new CharacterAbility('Strength', 10, 0, 0),
+			'dex': new CharacterAbility('Dexterity', 10, 0, 0),
+			'con': new CharacterAbility('Constitution', 10, 0, 0),
+			'int': new CharacterAbility('Intelligence', 10, 0, 0),
+			'wis': new CharacterAbility('Wisdom', 10, 0, 0),
+			'cha': new CharacterAbility('Charisma', 10, 0, 0),
+		}
 		// assign abilities
-		var currAbilities = {
-			'STR': {
-				'base': 10,
-				'racial': 0,
-				'total': 10
-			},
-			'DEX': {
-				'base': 10,
-				'racial': 0,
-				'total': 10
-			},
-			'CON': {
-				'base': 10,
-				'racial': 0,
-				'total': 10
-			},
-			'INT': {
-				'base': 10,
-				'racial': 0,
-				'total': 10
-			},
-			'WIS': {
-				'base': 10,
-				'racial': 0,
-				'total': 10
-			},
-			'CHA': {
-				'base': 10,
-				'racial': 0,
-				'total': 10
+		var prioritisedAbilities = [];
+		var maxPriority = -Infinity;
+		for (var ability in generatedClassVariant.abilities) {
+			if (generatedClassVariant.abilities[ability] > maxPriority) {
+				maxPriority = generatedClassVariant.abilities[ability];
 			}
 		}
-		var numPriorities = Math.max(abilityTree['STR'], abilityTree['DEX'], abilityTree['CON'], abilityTree['INT'], abilityTree['WIS'], abilityTree['CHA'])+1;
-		var abilitiesAssigned = 0;
-		for (var priority = 0; priority < numPriorities; priority++) {
+		for (var priority = 0; priority <= maxPriority; priority++) {
 			// find all abilities with given priority
-			var unshuffledAbilities = [];
-			for (var ability in abilityTree) {
-				if (abilityTree[ability] === priority) {
-					unshuffledAbilities.push(ability);
+			var abilities = [];
+			for (var ability in generatedClassVariant.abilities) {
+				if (generatedClassVariant.abilities[ability] === priority) {
+					abilities.push(ability);
 				}
 			}
-			// randomise array
-			var shuffledAbilities = [];
-			var numPasses = unshuffledAbilities.length;
-			for (var pass = 0; pass < numPasses; pass++) {
-				var shuffleIndex = Math.floor(unshuffledAbilities.length * Math.random());
-				shuffledAbilities[pass] = unshuffledAbilities[shuffleIndex];
-				unshuffledAbilities.splice(shuffleIndex, 1);
-			}
+			// shuffle
+			utils.shuffleArray(abilities);
 			// assign abilities
-			for (var abilityIndex = 0; abilityIndex < shuffledAbilities.length; abilityIndex++) {
-				currAbilities[shuffledAbilities[abilityIndex]].base = abilityRolls[abilitiesAssigned];
-				abilitiesAssigned++;
+			for (var abilityIndex = 0; abilityIndex < abilities.length; abilityIndex++) {
+				prioritisedAbilities.push(abilities[abilityIndex]);
 			}
+		}
+		for (var abilityIndex = 0; abilityIndex < prioritisedAbilities.length; abilityIndex++) {
+			generatedAbilities[prioritisedAbilities[abilityIndex]].roll = abilityRolls[abilityIndex];
 		}
 		// apply racial modifiers
-		for (var ability in currAbilities) {
-			currAbilities[ability].racial = currRace.abilityModifiers[ability];
+		for (var ability in generatedAbilities) {
+			generatedAbilities[ability].racial = characterRaces[selectedRaceKey].abilityModifiers[ability];
 		}
-		// calculate ability totals
-		for (var ability in currAbilities) {
-			currAbilities[ability].total = currAbilities[ability].base + currAbilities[ability].racial;
+		// apply age modifiers
+		for (var ability in generatedAbilities) {
+			generatedAbilities[ability].age = characterAgeRanges[generatedAgeRangeKey].abilityModifiers[ability];
 		}
 		// render abilities
-		for (var ability in currAbilities) {
+		for (var ability in generatedAbilities) {
 			var abilityElementIdPrefix = 'gen-abilities-' + ability.toLowerCase();
-			for (var component in currAbilities[ability]) {
-				$('#' + abilityElementIdPrefix + '-' + component).text(currAbilities[ability][component]);
-			}
+			$('#' + abilityElementIdPrefix + '-roll').text(generatedAbilities[ability].roll);
+			$('#' + abilityElementIdPrefix + '-racial').text(generatedAbilities[ability].racial);
+			$('#' + abilityElementIdPrefix + '-age').text(generatedAbilities[ability].age);
+			var total = generatedAbilities[ability].roll + generatedAbilities[ability].racial + generatedAbilities[ability].age;
+			$('#' + abilityElementIdPrefix + '-total').text(total);
+			$('#' + abilityElementIdPrefix + '-totalmodifier').text(Math.floor((total-10)/2));
 		}
-		// generate height
-		var heightModifier = rollDice(currRace.heightModifier[currGender]);
-		var currHeight = currRace.heightBase[currGender] + heightModifier;
-		// generate weight
-		var weightModifier = rollDice(currRace.weightMultiplier[currGender]) * heightModifier;
-		var currWeight = currRace.weightBase[currGender] + weightModifier;
-		// generate age
-		var ageModifier = rollDice(currRace.ageBrackets[currClass.ageBracket]);
-		var currAge = currRace.ageBase + ageModifier;
 		// render height/weight/age
-		var parsedHeight = Math.floor(currHeight/12) + '\' ' + (currHeight % 12) + '"';
-		var parsedWeight = currWeight + ' lb.';
-		$('#gen-height').text(parsedHeight);
-		$('#gen-weight').text(parsedWeight);
-		$('#gen-age').text(currAge);
-	});
-};
+		var parsedHeight = Math.floor(generatedHeight/12) + '\' ' + (generatedHeight % 12) + '"';
+		var parsedWeight = generatedWeight + ' lb.';
+		$('#gen-basic-height').text(parsedHeight);
+		$('#gen-basic-weight').text(parsedWeight);
+		$('#gen-basic-age').text(generatedAge + ' (' + characterAgeRanges[generatedAgeRangeKey].name + ')');
+		// render basic information
+		$('#gen-basic-gender').text(characterGenders[selectedGenderKey].name);
+		$('#gen-basic-race').text(characterRaces[selectedRaceKey].name);
+		$('#gen-basic-class').text(characterClasses[selectedClassKey].name);
+		$('#gen-basic-class-variant').text(characterClasses[selectedClassKey].variants[generatedClassVariantKey].name);
+	};
+
+	var initialise = function() {
+		// add generation parameters
+		var $generationGendersElements = utils.createDropdown(characterGenders, 'generation-gender', 'Gender');
+		var $generationAgeRangesElements = utils.createDropdown(characterAgeRanges, 'generation-age-range', 'Age Range');
+		var $generationRacesElements = utils.createDropdown(characterRaces, 'generation-race', 'Race');
+		var $generationClassesElements = utils.createDropdown(characterClasses, 'generation-class', 'Class');
+		var $generationClassVariantsElements = utils.createDropdown({}, 'generation-class-variant', 'Variant');
+		$generationClassVariantsElements = $generationClassVariantsElements.add('<label />', {
+			for: 'generation-class-variant-randomise',
+			text: 'Randomise'
+		}).add('<input />', {
+			checked: true,
+			id: 'generation-class-variant-randomise',
+			type: 'checkbox'
+		});
+		var $generationMethodsElements = utils.createDropdown(generationMethods, 'generation-method', 'Method');
+		$('#generation-parameters').append([
+			$('<li />').append($generationGendersElements),
+			$('<li />').append($generationAgeRangesElements),
+			$('<li />').append($generationRacesElements),
+			$('<li />').append($generationClassesElements),
+			$('<li />').append($generationClassVariantsElements),
+			$('<li />').append($generationMethodsElements)
+		]);
+		// add listener for class variant
+		var updateClassVariants = function() {
+			// remove existing options
+			$generationClassVariantsElements.filter('select').empty();
+			// add new options
+			$generationClassVariantsElements.append(utils.createOptions(characterClasses[
+				$(this).find('option:selected').val()
+			].variants));
+		}
+		$generationClassesElements.filter('select').change(updateClassVariants);
+		updateClassVariants.call($generationClassesElements.filter('select').get(0));
+		// add generate button
+		var $generateButtonElement = $('<button />', {
+			text: 'Generate'
+		}).click(generate);
+		$('#generation-parameters').append($('<li />').append($generateButtonElement));
+	};
+
+	// expose functionality
+	return {
+		initialise: initialise
+	};
+
+});

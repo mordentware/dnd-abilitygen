@@ -1,94 +1,106 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>DnD Ability Generator Demo Page</title>
-		<script src="scripts/vendor/jquery-2.1.0.min.js"></script>
-		<script src="scripts/app.js"></script>
+		<title>D&amp;D Ability Generator Demo Page</title>
+		<link rel="shortcut icon" href="images/icon_16.png">
+		<script data-main="scripts/main" src="scripts/lib/vendor/require-2.1.11.min.js"></script>
 	</head>
 	<body>
 		<fieldset>
-			<ul>
-				<li>
-					<label for="char-class">Class</label>
-					<select id="char-class"></select>
-				</li>
-				<li>
-					<label for="char-race">Race</label>
-					<select id="char-race"></select>
-				</li>
-				<li>
-					<label for="char-gender">Gender</label>
-					<select id="char-gender">
-						<option value="Male" selected="selected">Male</option>
-						<option value="Female">Female</option>
-					</select>
-				</li>
-				<li>
-					<label for="generation-method">Method</label>
-					<select id="generation-method"></select>
-				</li>
-				<li>
-					<button id="generate">Generate</button>
-				</li>
+			<legend>Parameters</legend>
+			<ul id="generation-parameters">
 			</ul>
 		</fieldset>
-		<table id="gen-abilities">
-			<tr>
-				<th>Ability</th>
-				<th>Base</th>
-				<th>Racial</th>
-				<th>Total</th>
-			</tr>
-			<tr>
-				<td>Strength</td>
-				<td id="gen-abilities-str-base"></td>
-				<td id="gen-abilities-str-racial"></td>
-				<td id="gen-abilities-str-total"></td>
-			</tr>
-			<tr>
-				<td>Dexterity</td>
-				<td id="gen-abilities-dex-base"></td>
-				<td id="gen-abilities-dex-racial"></td>
-				<td id="gen-abilities-dex-total"></td>
-			</tr>
-			<tr>
-				<td>Constitution</td>
-				<td id="gen-abilities-con-base"></td>
-				<td id="gen-abilities-con-racial"></td>
-				<td id="gen-abilities-con-total"></td>
-			</tr>
-			<tr>
-				<td>Intelligence</td>
-				<td id="gen-abilities-int-base"></td>
-				<td id="gen-abilities-int-racial"></td>
-				<td id="gen-abilities-int-total"></td>
-			</tr>
-			<tr>
-				<td>Wisdom</td>
-				<td id="gen-abilities-wis-base"></td>
-				<td id="gen-abilities-wis-racial"></td>
-				<td id="gen-abilities-wis-total"></td>
-			</tr>
-			<tr>
-				<td>Charisma</td>
-				<td id="gen-abilities-cha-base"></td>
-				<td id="gen-abilities-cha-racial"></td>
-				<td id="gen-abilities-cha-total"></td>
-			</tr>
-		</table>
-		<table>
-			<tr>
-				<th>Height</th>
-				<td id="gen-height"></td>
-			</tr>
-			<tr>
-				<th>Weight</th>
-				<td id="gen-weight"></td>
-			</tr>
-			<tr>
-				<th>Age</th>
-				<td id="gen-age"></td>
-			</tr>
-		</table>
+		<fieldset>
+			<legend>Results</legend>
+			<table id="gen-basic">
+				<tr>
+					<th>Gender</th>
+					<td id="gen-basic-gender"></td>
+				</tr>
+				<tr>
+					<th>Race</th>
+					<td id="gen-basic-race"></td>
+				</tr>
+				<tr>
+					<th>Class</th>
+					<td id="gen-basic-class"></td>
+				</tr>
+				<tr>
+					<th>Class Variant</th>
+					<td id="gen-basic-class-variant"></td>
+				</tr>
+				<tr>
+					<th>Height</th>
+					<td id="gen-basic-height"></td>
+				</tr>
+				<tr>
+					<th>Weight</th>
+					<td id="gen-basic-weight"></td>
+				</tr>
+				<tr>
+					<th>Age</th>
+					<td id="gen-basic-age"></td>
+				</tr>
+			</table>
+			<table id="gen-abilities">
+				<tr>
+					<th>Ability</th>
+					<th>Roll</th>
+					<th>Racial</th>
+					<th>Age</th>
+					<th>Total</th>
+					<th>Modifier</th>
+				</tr>
+				<tr>
+					<td>Strength</td>
+					<td id="gen-abilities-str-roll"></td>
+					<td id="gen-abilities-str-racial"></td>
+					<td id="gen-abilities-str-age"></td>
+					<td id="gen-abilities-str-total"></td>
+					<td id="gen-abilities-str-totalmodifier"></td>
+				</tr>
+				<tr>
+					<td>Dexterity</td>
+					<td id="gen-abilities-dex-roll"></td>
+					<td id="gen-abilities-dex-racial"></td>
+					<td id="gen-abilities-dex-age"></td>
+					<td id="gen-abilities-dex-total"></td>
+					<td id="gen-abilities-dex-totalmodifier"></td>
+				</tr>
+				<tr>
+					<td>Constitution</td>
+					<td id="gen-abilities-con-roll"></td>
+					<td id="gen-abilities-con-racial"></td>
+					<td id="gen-abilities-con-age"></td>
+					<td id="gen-abilities-con-total"></td>
+					<td id="gen-abilities-con-totalmodifier"></td>
+				</tr>
+				<tr>
+					<td>Intelligence</td>
+					<td id="gen-abilities-int-roll"></td>
+					<td id="gen-abilities-int-racial"></td>
+					<td id="gen-abilities-int-age"></td>
+					<td id="gen-abilities-int-total"></td>
+					<td id="gen-abilities-int-totalmodifier"></td>
+				</tr>
+				<tr>
+					<td>Wisdom</td>
+					<td id="gen-abilities-wis-roll"></td>
+					<td id="gen-abilities-wis-racial"></td>
+					<td id="gen-abilities-wis-age"></td>
+					<td id="gen-abilities-wis-total"></td>
+					<td id="gen-abilities-wis-totalmodifier"></td>
+				</tr>
+				<tr>
+					<td>Charisma</td>
+					<td id="gen-abilities-cha-roll"></td>
+					<td id="gen-abilities-cha-racial"></td>
+					<td id="gen-abilities-cha-age"></td>
+					<td id="gen-abilities-cha-total"></td>
+					<td id="gen-abilities-cha-totalmodifier"></td>
+				</tr>
+			</table>
+		</fieldset>
 	</body>
 </html>
