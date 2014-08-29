@@ -4,6 +4,7 @@
 	"name": "D&D Ability Generator",
 	"description": "Simple ability generator for D&D 3.5.",
 	"version": "1.0",
+
 	"icons": {
 		"16": "src/images/icon_16.png",
 		"128": "src/images/icon_128.png"

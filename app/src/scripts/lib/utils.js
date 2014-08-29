@@ -92,7 +92,7 @@ define([
 		}
 		return array;
 	};
-	
+
 	function shuffleArray(array) {
 }
 

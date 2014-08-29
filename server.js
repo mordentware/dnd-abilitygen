@@ -16,7 +16,7 @@ var ip = '0.0.0.0';
 			filePath = '/app.html';
 		}
 		filePath = './app/src' + filePath;
-	
+
 		var extname = path.extname(filePath);
 		var contentType = 'text/html';
 		switch (extname) {
@@ -27,7 +27,7 @@ var ip = '0.0.0.0';
 				contentType = 'text/css';
 				break;
 		}
-	
+
 		fs.exists(filePath, function(exists) {
 			if (exists) {
 				fs.readFile(filePath, function(error, content) {
