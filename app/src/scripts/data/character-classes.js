@@ -8,9 +8,9 @@ define([
 	 */
 	var characterClasses = {
 		'barbarian': new CharacterClass('Barbarian', 'simple', {
-			'rage': new CharacterClassVariant('Standard', {
+			'standard': new CharacterClassVariant('Standard', {
 				'str': 0,
-				'dex': 0,
+				'dex': 1,
 				'con': 1,
 				'int': 2,
 				'wis': 2,
