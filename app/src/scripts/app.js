@@ -42,6 +42,7 @@ define([
 		// generate age
 		var generatedAge;
 		var generatedAgeRangeKey = selectedAgeRangeKey;
+		var generatedMaximumAge = null;
 		switch (selectedAgeRangeKey) {
 			case 'starting':
 				generatedAge = characterRaces[selectedRaceKey].ageRanges['adult'] + utils.roll(characterRaces[selectedRaceKey].ageBrackets[characterClasses[selectedClassKey].ageBracket]);
@@ -64,6 +65,7 @@ define([
 				// roll their maximum age, then place them within that range
 				var maximumAge = utils.roll(characterRaces[selectedRaceKey].ageRanges['maximum']);
 				generatedAge = startingAge + Math.floor(Math.random() * maximumAge);
+				generatedMaximumAge = startingAge + maximumAge;
 				break;
 		}
 		// generate height/weight
@@ -132,7 +134,7 @@ define([
 		var parsedWeight = generatedWeight + ' lb.';
 		$('#gen-basic-height').text(parsedHeight);
 		$('#gen-basic-weight').text(parsedWeight);
-		$('#gen-basic-age').text(generatedAge + ' (' + characterAgeRanges[generatedAgeRangeKey].name + ')');
+		$('#gen-basic-age').text(generatedAge + (generatedMaximumAge !== null ? ', dies at ' + generatedMaximumAge : '') + ' (' + characterAgeRanges[generatedAgeRangeKey].name + ')');
 		// render basic information
 		$('#gen-basic-gender').text(characterGenders[selectedGenderKey].name);
 		$('#gen-basic-race').text(characterRaces[selectedRaceKey].name);
