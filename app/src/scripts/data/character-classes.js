@@ -114,8 +114,8 @@ define([
 				'str': 1,
 				'dex': 0,
 				'con': 1,
-				'int': 2,
-				'wis': 3,
+				'int': 3,
+				'wis': 2,
 				'cha': 3
 			}),
 			'cunning': new CharacterClassVariant('Cunning', {
